@@ -9,3 +9,111 @@ Here I deployed three versions for `authors` services and two versions for `book
 
 ## Traffic percentage:
 ![traffic_percentage](./screenshots/traffic_percentage.png "traffic_percentage")
+
+## Responses:
+1. Response from `authors:v2` and `books:v2`
+```bash
+ikorotia$ curl --location --request GET 'http://10.98.86.25/frontend-catalog/api/v1/dashboard' | python -m json.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   606    0   606    0     0  28402      0 --:--:-- --:--:-- --:--:-- 28857
+{
+    "authors": [
+        {
+            "age": 30, // new field
+            "firstName": "Loreth Anne",
+            "id": 1,
+            "lastName": "White"
+        },
+        {
+            "age": 20, // new field
+            "firstName": "Lisa",
+            "id": 2,
+            "lastName": "Regan"
+        },
+        {
+            "age": 55, // new field
+            "firstName": "Ty",
+            "id": 3,
+            "lastName": "Patterson"
+        }
+    ],
+    "books": [
+        {
+            "authorId": 1,
+            "id": 1,
+            "pages": 326,
+            "publishedYear": 1990, // new field
+            "title": "Semiosis: A Novel"
+...
+```
+2. Response from `authors:v1` and `books:v2`
+```bash
+ikorotia$ curl --location --request GET 'http://10.98.86.25/frontend-catalog/api/v1/dashboard' | python -m json.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   606    0   606    0     0  28402      0 --:--:-- --:--:-- --:--:-- 28857
+{
+    "authors": [
+        {
+            "firstName": "Loreth Anne",
+            "id": 1,
+            "lastName": "White"
+        },
+        {
+            "firstName": "Lisa",
+            "id": 2,
+            "lastName": "Regan"
+        },
+        {
+            "firstName": "Ty",
+            "id": 3,
+            "lastName": "Patterson"
+        }
+    ],
+    "books": [
+        {
+            "authorId": 1,
+            "id": 1,
+            "pages": 326,
+            "publishedYear": 1990, // new field
+            "title": "Semiosis: A Novel"
+        },
+...
+```
+3. Response from `authros:v2` and `books:v1`
+```bash
+ikorotia$ curl --location --request GET 'http://10.98.86.25/frontend-catalog/api/v1/dashboard' | python -m json.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   606    0   606    0     0  28402      0 --:--:-- --:--:-- --:--:-- 28857
+{
+    "authors": [
+        {
+            "age": 30, // new filed
+            "firstName": "Loreth Anne",
+            "id": 1,
+            "lastName": "White"
+        },
+        {
+            "age": 20, // new filed
+            "firstName": "Lisa",
+            "id": 2,
+            "lastName": "Regan"
+        },
+        {
+            "age": 55, // new filed
+            "firstName": "Ty",
+            "id": 3,
+            "lastName": "Patterson"
+        }
+    ],
+    "books": [
+        {
+            "authorId": 1,
+            "id": 1,
+            "pages": 326,
+            "title": "Semiosis: A Novel"
+        },
+...
+```
