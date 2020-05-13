@@ -1,11 +1,14 @@
 # Istio Virtual Service
 
-Here I deployed three versions for `authors` services and two versions for `books` services. 
+Here I deployed two versions for `authors` services, two versions for `books` services and two versions for `frontend` services. 
 ## Authors:
-`Authors` deployment has v1, v2, and v3 labels. v1 and v2 use `VirtualService` with a weight destination. For v1 I set 10%, for v2 I set 90%. Also, If you want to send a request to deployment v3 you should use header `x-developer illia-korotia`. For balancing traffic between these nodes uses `RANDOM` balancer.
+`Authors` deployment has v1 and  v2 labels. v1 and v2 version uses `VirtualService` with a weight destination. For v1 I set 10%, for v2 I set 90%. For balancing traffic between these nodes uses `RANDOM` balancer.
 
 ## Books:
-`Books` deployment has v1 and v2 labels. For v1 I set 10%, for v2 I set 90%. For balancing traffic between these nodes uses `ROUND_ROBIN` balancer.
+`Books` deployment has v1 and v2 labels. v1 and v2 version uses `VirtualService` with a weight destination. For v1 I set 10%, for v2 I set 90%. For balancing traffic between these nodes uses `ROUND_ROBIN` balancer.
+
+## Frontend:
+`Frontend` deployment has v1 and v2 labels. This deployment uses a match by a header for balancing traffic between v1 and v2.
 
 ## Traffic percentage:
 ![traffic_percentage](./screenshots/traffic_percentage.png "traffic_percentage")
@@ -116,4 +119,23 @@ ikorotia$ curl --location --request GET 'http://10.98.86.25/frontend-catalog/api
             "title": "Semiosis: A Novel"
         },
 ...
+```
+4. Response from `frontend:v2`. Match by `x-developer` header:
+```bash
+ikorotia$ curl 'http://10.98.86.25/frontend-catalog/api/v1/' -H 'x-developer: illia-korotia' | python -m json.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   635  100   635    0     0  67524      0 --:--:-- --:--:-- --:--:-- 70555
+{
+...
+	{
+            "authorId": 3,
+            "id": 5,
+            "pages": 466,
+            "publishedYear": 2011,
+            "title": "Revenant Gun"
+        }
+    ],
+    "developer": "illia-korotia"
+}
 ```
