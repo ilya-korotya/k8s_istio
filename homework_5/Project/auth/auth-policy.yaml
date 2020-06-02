@@ -1,0 +1,12 @@
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: auth-policy
+spec:
+  targets:
+    - name: frontend
+  origins:
+    - jwt:
+        issuer: "https://dev-alaf7j99.eu.auth0.com/"
+        jwksUri: "https://dev-alaf7j99.eu.auth0.com/.well-known/jwks.json"
+  principalBinding: USE_ORIGIN
